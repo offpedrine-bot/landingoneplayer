@@ -49,9 +49,20 @@ export default function LandingCasino() {
   }
 
   return (
-    <main className="min-h-screen w-full bg-gradient-to-b from-[#12081f] to-[#1b0f2e] text-white font-sans flex items-center justify-center p-4">
-      <div className="w-full max-w-5xl">
-        {/* HERO */}
+   <main
+    className="relative min-h-screen w-full text-white font-sans flex items-center justify-center p-4 bg-cover bg-center"
+    style={{
+      backgroundImage:
+        "url('https://images.unsplash.com/photo-1614849963643-b0641e50b2c5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80')",
+    }}
+  >
+    {/* Overlay oscuro para que el texto sea legible */}
+    <div className="absolute inset-0 bg-black/60" />
+
+    {/* Contenedor del contenido */}
+    <div className="relative z-10 w-full max-w-5xl">
+      {/* HERO */}
+
         <section className="relative overflow-hidden rounded-3xl p-8 md:p-12 bg-[radial-gradient(1200px_600px_at_20%_-20%,rgba(182,255,0,0.25),transparent),radial-gradient(800px_400px_at_110%_10%,rgba(0,255,200,0.2),transparent)] border border-white/10 shadow-2xl">
           <div className="absolute inset-0 pointer-events-none bg-[url('https://images.unsplash.com/photo-1541542684-4a1a86f27386?q=80&w=1920&auto=format&fit=crop')] opacity-25 bg-cover bg-center" />
           <div className="absolute inset-0 bg-gradient-to-b from-[#12081f]/80 via-[#12081f]/60 to-transparent pointer-events-none" />
