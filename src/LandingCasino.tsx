@@ -56,19 +56,18 @@ export default function LandingCasino() {
 
   return (
     <main className="relative min-h-screen w-full text-white font-sans flex items-center justify-center p-4">
-      {/* Capa de fondo con IMG ABSOLUTA (a prueba de conflictos) */}
-      <div className="absolute inset-0 -z-10 pointer-events-none">
-        <img
-          src="https://images.unsplash.com/photo-1614849963643-b0641e50b2c5?auto=format&fit=crop&w=1920&q=80"
-          alt=""
-          className="w-full h-full object-cover"
-          loading="eager"
-          fetchPriority="high"
-        />
-      </div>
+  {/* Capa de fondo con IMG ABSOLUTA */}
+  <div className="absolute inset-0 -z-10 pointer-events-none">
+    <img
+      src="/casino-bg.jpg"   // <- la imagen que subiste a /public
+      alt="Fondo de casino"
+      className="w-full h-full object-cover"
+    />
+  </div>
 
-      {/* Overlay oscuro para legibilidad (no bloquea clics) */}
-      <div className="absolute inset-0 bg-black/50 pointer-events-none -z-0" />
+  {/* Overlay oscuro para que el texto sea legible */}
+  <div className="absolute inset-0 bg-black/50 pointer-events-none -z-0" />
+
 
       {/* Contenido */}
       <div className="relative z-10 w-full max-w-5xl">
