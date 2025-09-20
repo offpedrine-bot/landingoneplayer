@@ -56,15 +56,13 @@ export default function LandingCasino() {
 
   return (
     <main
-      className="
-        relative min-h-screen w-full text-white font-sans
-        flex items-center justify-center p-4
-        bg-cover bg-center bg-fixed
-        bg-[url('https://images.unsplash.com/photo-1614849963643-b0641e50b2c5?auto=format&fit=crop&w=1920&q=80')]
-      "
-    >
-      {/* Overlay oscuro para legibilidad (no bloquea clics) */}
-      <div className="absolute inset-0 bg-black/60 pointer-events-none" />
+  className="relative min-h-screen w-full text-white font-sans flex items-center justify-center p-4 bg-cover bg-center bg-fixed"
+  style={{
+    backgroundImage: "url('https://images.unsplash.com/photo-1614849963643-b0641e50b2c5?auto=format&fit=crop&w=1920&q=80')",
+  }}
+>
+  {/* Overlay oscuro (no bloquea clics) */}
+  <div className="absolute inset-0 bg-black/60 pointer-events-none" />
 
       {/* Contenido */}
       <div className="relative z-10 w-full max-w-5xl">
