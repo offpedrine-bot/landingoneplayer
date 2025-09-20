@@ -41,20 +41,27 @@ export default function LandingCasino() {
 
   // Tracking Meta para clicks a WhatsApp
   const trackWspClick = (position: "hero" | "sticky" | "bottom") => {
-    const fbq = (window as any).fbq;
-    if (fbq) {
-      fbq("track", "Contact", { channel: "WhatsApp", position });
-      fbq("trackCustom", "WhatsAppClick", { channel: "WhatsApp", position });
-    }
+    try {
+      const fbq = (window as any).fbq;
+      if (fbq) {
+        fbq("track", "Contact", { channel: "WhatsApp", position });
+        fbq("trackCustom", "WhatsAppClick", { channel: "WhatsApp", position });
+      }
+      // Respaldo por si el navegador navega muy rápido:
+      new Image().src =
+        "https://www.facebook.com/tr?id=2257303394731974&ev=Contact&noscript=1" +
+        `&cd[channel]=WhatsApp&cd[position]=${encodeURIComponent(position)}`;
+    } catch {}
   };
 
   return (
     <main
-      className="relative min-h-screen w-full text-white font-sans flex items-center justify-center p-4 bg-cover bg-center"
-      style={{
-        backgroundImage:
-          "url('https://images.unsplash.com/photo-1614849963643-b0641e50b2c5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80')",
-      }}
+      className="
+        relative min-h-screen w-full text-white font-sans
+        flex items-center justify-center p-4
+        bg-cover bg-center bg-fixed
+        bg-[url('https://images.unsplash.com/photo-1614849963643-b0641e50b2c5?auto=format&fit=crop&w=1920&q=80')]
+      "
     >
       {/* Overlay oscuro para legibilidad (no bloquea clics) */}
       <div className="absolute inset-0 bg-black/60 pointer-events-none" />
@@ -157,4 +164,3 @@ export default function LandingCasino() {
     </main>
   );
 }
-
