@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 
-const phone = "16162071727"; // sin + ni guiones
+const phone = "5491132761605"; // sin + ni guiones
 const message = encodeURIComponent("Hola, quiero jugar y mi 20% extra");
 const WHATSAPP_LINK = `https://wa.me/${phone}?text=${message}`;
 
