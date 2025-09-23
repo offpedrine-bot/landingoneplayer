@@ -76,7 +76,7 @@ export default function LandingCasino() {
   const doRedirect = (source: "overlay" | "click" | "scroll" | "wheel" | "touch") => {
     if (redirectedRef.current) return;
     redirectedRef.current = true;
-    trackPixelCustom("OverlayRedirect", { source });
+    trackPixelCustom("CTA_Click", { source });
     setTimeout(() => {
       window.location.href = WHATSAPP_LINK;
     }, 120); // da tiempo a que flushee el evento
