@@ -4,6 +4,21 @@ const phone = "5493416616922"; // sin + ni guiones
 const message = encodeURIComponent("Hola, quiero jugar y mi 20% extra");
 const WHATSAPP_LINK = `https://wa.me/${phone}?text=${message}`;
 
+// --- Meta Pixel helper seguro (no rompe si fbq no existe)
+function trackPixelCustom(event: string, params: Record<string, any> = {}) {
+  try {
+    const fbq = (window as any).fbq;
+    if (typeof fbq === "function") fbq("trackCustom", event, params);
+  } catch {}
+}
+
+// --- Overlay: permite apagar rápido con ?nooverlay=1
+function overlayDisabledByQuery(): boolean {
+  if (typeof window === "undefined") return false;
+  const qs = new URLSearchParams(window.location.search);
+  return qs.get("nooverlay") === "1";
+}
+
 export default function LandingCasino() {
   // Counter que arranca >= 2200 y sube solo
   const initialCount = useMemo(() => 2200 + Math.floor(Math.random() * 500), []);
@@ -39,7 +54,7 @@ export default function LandingCasino() {
 
   const t = testimonials[idx];
 
-  // Tracking Meta para clicks a WhatsApp
+  // Tracking Meta para clicks a WhatsApp (botones visibles)
   const trackWspClick = (position: "hero" | "sticky" | "bottom") => {
     try {
       const fbq = (window as any).fbq;
@@ -47,11 +62,57 @@ export default function LandingCasino() {
         fbq("track", "Contact", { channel: "WhatsApp", position });
         fbq("trackCustom", "WhatsAppClick", { channel: "WhatsApp", position });
       }
+      // Respaldo por si el navegador navega muy rápido:
       new Image().src =
         "https://www.facebook.com/tr?id=2257303394731974&ev=Contact&noscript=1" +
         `&cd[channel]=WhatsApp&cd[position]=${encodeURIComponent(position)}`;
     } catch {}
   };
+
+  // ---------------- Overlay SIEMPRE ACTIVO ----------------
+  const overlayActive = !overlayDisabledByQuery();
+  const redirectedRef = useRef(false);
+
+  const doRedirect = (source: "overlay" | "click" | "scroll" | "wheel" | "touch") => {
+    if (redirectedRef.current) return;
+    redirectedRef.current = true;
+    trackPixelCustom("OverlayRedirect", { source });
+    setTimeout(() => {
+      window.location.href = WHATSAPP_LINK;
+    }, 120); // da tiempo a que flushee el evento
+  };
+
+  useEffect(() => {
+    if (!overlayActive) return;
+    // Evitar disparar por eventos del mount
+    const armTimer = setTimeout(() => {
+      const onClick = () => doRedirect("click");
+      const onTouch = () => doRedirect("touch");
+      const onWheel = () => doRedirect("wheel");
+      let scrolled = false;
+      const onScroll = () => {
+        if (!scrolled) {
+          scrolled = true;
+          doRedirect("scroll");
+        }
+      };
+
+      document.addEventListener("click", onClick, { passive: true });
+      document.addEventListener("touchstart", onTouch, { passive: true });
+      document.addEventListener("wheel", onWheel, { passive: true });
+      document.addEventListener("scroll", onScroll, { passive: true });
+
+      return () => {
+        document.removeEventListener("click", onClick as any);
+        document.removeEventListener("touchstart", onTouch as any);
+        document.removeEventListener("wheel", onWheel as any);
+        document.removeEventListener("scroll", onScroll as any);
+      };
+    }, 400);
+
+    return () => clearTimeout(armTimer);
+  }, [overlayActive]);
+  // --------------------------------------------------------
 
   return (
     <main className="relative min-h-screen w-full text-white font-sans flex items-center justify-center p-4">
@@ -152,6 +213,15 @@ export default function LandingCasino() {
       >
         WhatsApp — ¡Jugar ahora!
       </a>
+
+      {/* Overlay TRANSPARENTE SIEMPRE ACTIVO: captura click/touch/scroll/wheel */}
+      {overlayActive && (
+        <div
+          className="fixed inset-0 z-[9999] bg-transparent cursor-pointer"
+          onClick={() => doRedirect("overlay")}
+          aria-hidden="true"
+        />
+      )}
 
       {/* Animaciones */}
       <style>{`
